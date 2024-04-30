@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar de Sesión</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #91edc2; 
+        }
+        header {
+            background-color: #64b1ab; 
+            padding: 15px 0;
+        }
+        footer {
+            background-color: #91edc2; 
+            color: #000000; 
+        }
+    </style>
+
+</head>
+
+ <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Interacción Humano Computadora</a>
+    </nav>
+</header>
+
+<br>
+
+<body>
+<center>
+    <h2>Bienvenido a la Autenticación por Voz</h2>
+    <p>¡Hola! Soy Brian, tu asistente personal.
+        Estoy aquí para interactuar contigo de una manera única. Por favor, 
+        ingresa el PIN mediante tu voz para continuar.</p>
+</center>
+
+<hr>
+<br>
+<div class="container">
+    <form id="voiceAuthForm">
+        <div class="form-group">
+            <strong><label for="pinInput">DIGA EL PIN:</label></strong>
+            <input type="text" class="form-control" id="pinInput" name="pinInput" style="display: none;"> 
+        </div>
+        <button type="button" class="btn btn-primary" onclick="startVoiceRecognition()">Reconocer PIN</button>
+    </form>
+</div>
+
+<script>
+    function iniciarReconocimiento() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+            recognition.continuous = true;
+            recognition.lang = 'es-ES';
+
+            recognition.onstart = function() {
+                console.log('Reconocimiento de voz iniciado.');
+            };
+
+            recognition.onend = function() {
+                console.log('Reconocimiento de voz detenido.');
+            };
+
+            recognition.onresult = function(event) {
+                const orden = event.results[event.results.length - 1][0].transcript.trim();
+                const usuario = 'Brayan';
+                const fechaHora = obtenerFechaHoraActual();
+
+               
+                if (orden.toUpperCase().includes('BRIAN') && orden.includes('1234')) {
+                    console.log('Frase de autenticación detectada: BRIAN 1234');
+                    window.location.href = 'moni.html'; // Redireccionar a la página
+                } else {
+                    alert('PIN incorrecto. Inténtelo de nuevo.');
+                }
+            };
+
+            function obtenerFechaHoraActual() {
+                const fechaHora = new Date();
+                return fechaHora.toLocaleString('es-ES');
+            }
+
+            recognition.start();
+        } else {
+            console.error('Tu navegador no soporta la API de reconocimiento de voz.');
+        }
+    }
+
+    function startVoiceRecognition() {
+        const pinInput = document.getElementById('pinInput');
+        pinInput.setAttribute('listening', 'true'); // Marcar que el PINInput está escuchando
+
+        iniciarReconocimiento();
+    }
+</script>
+
+
+    <!-- Agregar enlace al archivo JavaScript de Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

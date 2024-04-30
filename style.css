@@ -1,0 +1,5 @@
+.draggable {
+    position: absolute;
+    cursor: move;
+    user-select: none; /* Evita la selección accidental de texto */
+}
